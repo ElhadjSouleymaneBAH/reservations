@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+<head>
+    <meta charset="utf-8">
+    <title th:text="${title} ?: 'Liste des artistes'">Liste des artistes</title>
+    <!-- Lien vers le CSS principal -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="container">
+    <div layout:fragment="content">
+        <h1 th:text="${title}">Liste des artistes</h1>
+
+        <!-- Vérifie si la liste des artistes n'est pas vide -->
+        <table class="table table-striped" th:unless="${#lists.isEmpty(artists)}">
+            <thead>
+            <tr>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Détails</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Parcours chaque artiste de la liste et affiche les informations -->
+
+            <tr th:each="artist : ${artists}">
+                <td th:text="${artist.firstname}">Prénom</td>
+                <td th:text="${artist.lastname}">Nom</td>
+                <td>
+                    <a th:text="'Voir ' + ${artist.firstname}" th:href="@{/artists/{id}(id=${artist.id})}">Voir Détails</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- Message à afficher si aucun artiste n'est présent dans la liste -->
+        <div th:if="${not#lists.isEmpty(artists)}">
+            <p>Aucun artiste n'est disponible pour le moment.</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+
