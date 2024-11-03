@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.mx/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+<head>
+  <meta charset="UTF-8">
+  <title>Modification d'un artiste</title>
+</head>
+<body>
+<div class="container">
+  <div layout:fragment="content">
+    <h1 th:text="|${artist.firstname}  ${artist.lastname}|">Bob Sull</h1>
+
+    <form th:action="@{/artists/{id}(id=${artist.id})}" th:object="${artist}" th:method="post">
+      <!-- Champ caché pour la méthode PUT -->
+      <input type="hidden" name="_method" value="PUT"/>
+
+      <div>
+        <label>Id:</label>
+        <span th:text="${artist.id}">1</span>
+      </div>
+      <div>
+        <label>Firstname:</label>
+        <input type="text" th:field="*{firstname}" required>
+      </div>
+      <div>
+        <label>Lastname:</label>
+        <input type="text" th:field="*{lastname}" required>
+      </div>
+      <div>
+        <button type="submit" th:text="Modifier">Modifier</button>
+        <button type="reset" th:text="Réinitialiser">Réinitialiser</button>
+        <a th:href="@{/artists}">Annuler</a>
+      </div>
+    </form>
+
+    <nav><a th:href="@{/artists}">Retour à l'index</a></nav>
+  </div>
+</div>
+</body>
+</html>

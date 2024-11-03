@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${title} ?: 'Fiche d’un artiste'">Fiche d'un artiste</title>
+  <!-- Lien vers le CSS principal -->
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="container mt-5">
+  <div layout:fragment="content">
+    <!-- Affichage du nom et du prénom de l'artiste -->
+    <h1 th:text="|${artist.firstname} ${artist.lastname}|">Bob Sull</h1>
+
+    <!-- Section des actions -->
+    <div class="actions mt-3">
+      <a th:href="@{/artists/edit/{id}(id=${artist.id})}" class="btn btn-warning">Modifier</a>
+      <a th:href="@{/artists}" class="btn btn-secondary">Retour à l'index</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
