@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title th:text="${title} ?: 'Footer - Projet Réservations'">Footer - Projet Réservations</title>
+</head>
+<body>
+<footer th:fragment="footer">
+    &copy; 2023 &ndash; EPFC / ICC &ndash; Projet Réservations. Tous droits réservés.
+    <div>
+        <a th:href="@{/privacy-policy}">Politique de Confidentialité</a> |
+        <a th:href="@{/terms-of-service}">Conditions d'Utilisation</a> |
+        <a th:href="@{/contact}">Contactez-nous</a>
+    </div>
+</footer>
+</body>
+</html>
+
+
