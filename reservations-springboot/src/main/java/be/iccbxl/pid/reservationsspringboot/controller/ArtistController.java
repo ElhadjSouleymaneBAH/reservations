@@ -1,31 +1,83 @@
 package be.iccbxl.pid.reservationsspringboot.controller;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import be.iccbxl.pid.reservationsspringboot.model.Artist;
 import be.iccbxl.pid.reservationsspringboot.service.ArtistService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
-@RestController
+@Controller
 public class ArtistController {
     @Autowired
     ArtistService service;
 
+    // Méthode pour afficher la liste de tous les artistes
     @GetMapping("/artists")
-    public String index() {
-        StringBuilder content = new StringBuilder("<ul>");
-
+    public String index(Model model) {
         List<Artist> artists = service.getAllArtists();
-        artists.forEach(artist -> {
-            content.append("<li>"+artist+"</li>");
-        });
-        content.append("</ul>");
-
-        return content.toString();
+        model.addAttribute("artists", artists);
+        model.addAttribute("title", "Liste des artistes");
+        return "artist/index";
     }
 
+    // Méthode pour afficher la fiche d'un artiste spécifique
+    @GetMapping("/artists/{id}")
+    public String show(Model model, @PathVariable("id") long id) {
+        Artist artist = service.getArtist(id);
+        model.addAttribute("artist", artist);
+        model.addAttribute("title", "Fiche d'un artiste");
+        return "artist/show";
+    }
+
+    // Nouvelle méthode : Affichage du formulaire de modification de l'artiste
+    @GetMapping("/artists/{id}/edit")
+    public String edit(Model model, @PathVariable("id") long id, HttpServletRequest request) {
+        Artist artist = service.getArtist(id);
+        model.addAttribute("artist", artist);
+
+        // Générer le lien retour pour l'annulation
+        String referrer = request.getHeader("Referer");
+        if (referrer != null && !referrer.equals("")) {
+            model.addAttribute("back", referrer);
+        } else {
+            model.addAttribute("back", "/artists/" + artist.getId());
+        }
+
+        return "artist/edit";
+    }
+
+    // Nouvelle méthode : Mise à jour de l'artiste
+    @PutMapping("/artists/{id}/edit")
+    public String update(@Valid @ModelAttribute("artist") Artist artist,
+                         BindingResult bindingResult,
+                         @PathVariable("id") long id,
+                         Model model) {
+
+        // Si des erreurs de validation existent, retourner vers le formulaire de modification
+        if (bindingResult.hasErrors()) {
+            return "artist/edit";
+        }
+
+        // Récupérer l'artiste existant dans la base de données
+        Artist existing = service.getArtist(id);
+        if (existing == null) {
+            return "artist/index";  // Si l'artiste n'existe pas, retourner vers la liste des artistes
+        }
+
+        // Mettre à jour l'artiste avec les nouvelles informations
+        service.updateArtist(id, artist);
+
+        // Rediriger vers la fiche de l'artiste après la mise à jour
+        return "redirect:/artists/" + artist.getId();
+    }
 }
