@@ -11,33 +11,37 @@
     <div layout:fragment="content">
         <h1 th:text="${title}">Liste des artistes</h1>
 
-        <!-- Affichage du tableau des artistes uniquement s'il y a des artistes disponibles -->
-        <table class="table table-striped" th:unless="${#lists.isEmpty(artists)}">
+        <div class="actions">
+            <a th:href="@{/artists/create}">Add new artist</a>
+        </div>
+
+        <!-- Tableau des artistes, affiché seulement si la liste n'est pas vide -->
+        <table th:unless="${#lists.isEmpty(artists)}">
             <thead>
             <tr>
-                <th>Prénom</th>
-                <th>Nom</th>
-                <th>Actions</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th colspan="3">Actions</th>
             </tr>
             </thead>
             <tbody>
-            <!-- Boucle sur chaque artiste dans la liste d'artistes -->
             <tr th:each="artist : ${artists}">
-                <td th:text="${artist.firstname}">Prénom</td>
-                <td th:text="${artist.lastname}">Nom</td>
+                <td th:text="${artist.firstname}">Bob</td>
+                <td th:text="${artist.lastname}">Sull</td>
+                <td><a th:href="@{/artists/{id}(id=${artist.id})}">View</a></td>
+                <td><a th:href="@{/artists/{id}/edit(id=${artist.id})}">Edit</a></td>
                 <td>
-                    <a th:href="@{/artists/{id}(id=${artist.id})}">Voir</a> |
-                    <a th:href="@{/artists/{id}/edit(id=${artist.id})}">Modifier</a>
+                    <!-- Formulaire de suppression -->
+                    <form th:action="@{/artists/{id}(id=${artist.id})}" th:method="delete">
+                        <button type="button" onclick="if(confirm('Confirmer la suppression de l\'artiste #${artist.id}')) { this.form.submit(); }">Delete</button>
+                    </form>
                 </td>
             </tr>
             </tbody>
         </table>
 
-        <!-- Affiche un message si la liste est vide -->
-        <p th:if="${#lists.isEmpty(artists)}" th:text="'Aucun artiste disponible pour le moment.'">Aucun artiste disponible pour le moment.</p>
-
-        <!-- Lien vers la création d'un nouvel artiste -->
-        <a th:href="@{/artists/create}">Ajouter un nouvel artiste</a>
+        <!-- Message si la liste est vide -->
+        <p th:if="${#lists.isEmpty(artists)}">Aucun artiste n'est disponible pour le moment.</p>
     </div>
 </div>
 </body>

@@ -1,33 +1,36 @@
 <!DOCTYPE html>
 <html lang="fr" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:layout="http://www.ultraq.net.mx/thymeleaf/layout"
       layout:decorate="~{layouts/main}">
 <head>
-  <meta charset="UTF-8">
-  <title th:text="${title} ?: 'Fiche d’un artiste'">Fiche d'un artiste</title>
-  <!-- Lien vers le CSS principal -->
-  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <title th:text="${title}">Fiche d'un artiste</title>
 </head>
 <body>
-<div class="container mt-5">
+<div class="container">
   <div layout:fragment="content">
-    <!-- Affichage du nom et du prénom de l'artiste -->
     <h1 th:text="|${artist.firstname} ${artist.lastname}|">Bob Sull</h1>
 
-    <!-- Section des actions -->
-    <div class="actions mt-3">
-      <a th:href="@{/artists/edit/{id}(id=${artist.id})}" class="btn btn-warning">Modifier</a>
-      <a th:href="@{/artists}" class="btn btn-secondary">Retour à l'index</a>
+
+    <h2>Liste des types</h2>
+    <ul th:unless="${#lists.isEmpty(artist.types)}">
+      <li th:each="type : ${artist.types}" th:text="${type.type}">Type</li>
+    </ul>
+
+    <div class="actions">
+
+      <a th:href="@{/artists/{id}/edit(id=${artist.id})}">Edit</a>
+
+
+      <form th:action="@{/artists/{id}(id=${artist.id})}" th:method="delete" th:object="${artist}">
+        <button type="button" onclick="if(confirm('Confirmer la suppression de l\'artiste #${artist.id}')) { this.form.submit(); }">Delete</button>
+      </form>
     </div>
+
+
+    <nav>
+      <a th:href="@{/artists}">Retour à l'index</a>
+    </nav>
   </div>
 </div>
 </body>
 </html>
-
-
-
-
-
-
-
-
