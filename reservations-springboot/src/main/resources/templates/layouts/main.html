@@ -2,19 +2,40 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.mx/thymeleaf/layout">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Projet Réservations</title>
+
+    <!-- Section pour les styles spécifiques -->
+    <link th:href="@{/css/main.css}" rel="stylesheet">
     <th:block layout:fragment="css">
+        <!-- Les fichiers CSS spécifiques à une page peuvent être insérés ici -->
     </th:block>
 </head>
 <body>
-<div th:replace="fragments/header :: header">Header here</div>
-<div class="container">
-    <div layout:fragment="content">Main content will be inserted here.</div>
-</div>
-<div th:replace="fragments/footer :: footer">&copy; 2016 The Static Templates</div>
+<!-- Header global -->
+<header th:replace="fragments/header :: header">
+    <!-- Contenu par défaut si le fragment est absent -->
+    <h1>Projet Réservations</h1>
+</header>
+
+<!-- Contenu principal -->
+<main class="container">
+    <section layout:fragment="content">
+        <!-- Le contenu spécifique de la page sera inséré ici -->
+    </section>
+</main>
+
+<!-- Footer global -->
+<footer th:replace="fragments/footer :: footer">
+    <!-- Contenu par défaut si le fragment est absent -->
+    <p>&copy; 2024 Projet Réservations. Tous droits réservés.</p>
+</footer>
+
+<!-- Section pour les scripts spécifiques -->
+<script th:src="@{/js/main.js}"></script>
 <th:block layout:fragment="scripts">
+    <!-- Les fichiers JS spécifiques à une page peuvent être insérés ici -->
 </th:block>
 </body>
 </html>
-

@@ -1,0 +1,4 @@
+CREATE TABLE `types` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `type` VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL UNIQUE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
