@@ -1,42 +1,32 @@
 package be.iccbxl.pid.reservations_springboot.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import be.iccbxl.pid.reservations_springboot.model.Artist;
 import be.iccbxl.pid.reservations_springboot.service.ArtistService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/artists")
 public class ArtistController {
-
-    private final ArtistService artistService;
-
     @Autowired
-    public ArtistController(ArtistService artistService) {
-        this.artistService = artistService;
+    ArtistService service;
+
+    @GetMapping("/artists")
+    public String index() {
+        StringBuilder content = new StringBuilder("<ul>");
+
+        List<Artist> artists = service.getAllArtists();
+        artists.forEach(artist -> {
+            content.append("<li>"+artist+"</li>");
+        });
+        content.append("</ul>");
+
+        return content.toString();
     }
 
-    @GetMapping
-    public List<Artist> getAllArtists() {
-        return artistService.getAllArtists();
-    }
-
-    @GetMapping("/{id}")
-    public Optional<Artist> getArtistById(@PathVariable Long id) {
-        return artistService.getArtistById(id);
-    }
-
-    @PostMapping
-    public Artist createArtist(@RequestBody Artist artist) {
-        return artistService.saveArtist(artist);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteArtist(@PathVariable Long id) {
-        artistService.deleteArtist(id);
-    }
 }
+
 
