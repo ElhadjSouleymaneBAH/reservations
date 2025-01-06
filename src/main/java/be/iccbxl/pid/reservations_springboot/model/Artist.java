@@ -1,7 +1,6 @@
 package be.iccbxl.pid.reservations_springboot.model;
 
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,22 +12,23 @@ import jakarta.validation.constraints.Size;
 @Entity
 @Table(name = "artists")
 public class Artist {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Le prénom ne doit pas être vide.")
-    @Size(min = 2, max = 60, message = "Le prénom doit contenir entre 2 et 60 caractères.")
+    @NotBlank(message = "The firstname must not be empty.")
+    @Size(min = 2, max = 60, message = "The firstname must be between 2 and 60 characters long.")
     private String firstname;
 
-    @NotBlank(message = "Le nom de famille ne doit pas être vide.")
-    @Size(min = 2, max = 60, message = "Le nom de famille doit contenir entre 2 et 60 caractères.")
+    @NotBlank(message = "The lastname must not be empty.")
+    @Size(min = 2, max = 60, message = "The lastname must be between 2 and 60 characters long.")
     private String lastname;
 
-    protected Artist() {
-        // Constructeur par défaut requis pour JPA
-    }
+    // Constructeur protégé pour JPA
+    public Artist() {}
 
+    // Constructeur avec paramètres pour faciliter la création d'instances
     public Artist(String firstname, String lastname) {
         this.firstname = firstname;
         this.lastname = lastname;
@@ -37,6 +37,10 @@ public class Artist {
     // Getters et Setters
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstname() {
@@ -55,9 +59,13 @@ public class Artist {
         this.lastname = lastname;
     }
 
+    // Méthode toString pour afficher l'objet Artist en tant que chaîne
     @Override
     public String toString() {
-        return String.format("%s %s", firstname, lastname);
+        return "Artist{" +
+                "id=" + id +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                '}';
     }
 }
-

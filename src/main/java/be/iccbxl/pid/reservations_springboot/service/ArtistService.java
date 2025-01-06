@@ -3,10 +3,10 @@ package be.iccbxl.pid.reservations_springboot.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import be.iccbxl.pid.reservations_springboot.model.Artist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import be.iccbxl.pid.reservations_springboot.model.Artist;
 import be.iccbxl.pid.reservations_springboot.repository.ArtistRepository;
 
 @Service
