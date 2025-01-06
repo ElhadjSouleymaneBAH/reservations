@@ -6,24 +6,9 @@
 </head>
 <body>
 <div class="container">
+  <div id="notification" th:replace="~{main :: notification}"></div>
   <div layout:fragment="content">
-    <h1 th:text="${title}">Liste des artistes</h1>
-
-    <table th:unless="${#lists.isEmpty(artists)}">
-      <thead>
-      <tr>
-        <th>Firstname</th>
-        <th>Lastname</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr th:each="artist : ${artists}">
-        <td th:text="${artist.firstname}">Bob</td>
-        <td><a th:text="${artist.lastname}"
-               th:href="@{/artists/{id}(id=${artist.id})}">Sull</a></td>
-      </tr>
-      </tbody>
-    </table>
+    <!-- … -->
   </div>
 </div>
 </body>
