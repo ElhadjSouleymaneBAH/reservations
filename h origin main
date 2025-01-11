@@ -1,0 +1,11 @@
+[33m6f6e254[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m Added notification system
+[33m7f0198d[m Controller Artist+templates+routes
+[33mb75afd2[m Form Delete Artist
+[33m193cc33[m Form create Artist
+[33m3671f54[m Form update Artist
+[33m10394cf[m Controller Artist +templates +routes
+[33m37d6fe1[m Ajout du modèle Artist et données initiales
+[33mda47d27[m Modèle Artist +migration +données initiales
+[33mc44fdae[m Modèle Artist +migration +données initiales
+[33m7eb06f8[m After database configuration
+[33m095ceab[m After framework installation
