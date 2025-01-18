@@ -1,10 +1,9 @@
 package be.iccbxl.pid.reservations_springboot.model;
 
-
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import java.util.Set;
 
 @Entity
 @Table(name = "shows")
@@ -30,6 +29,14 @@ public class Show {
     @ManyToOne
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;  // Relation ManyToOne avec Location
+
+    @ManyToMany
+    @JoinTable(
+            name = "show_price",
+            joinColumns = @JoinColumn(name = "show_id"),
+            inverseJoinColumns = @JoinColumn(name = "price_id")
+    )
+    private Set<Price> prices; // Relation ManyToMany avec Price
 
     // Constructeurs
     public Show() {}
@@ -100,6 +107,14 @@ public class Show {
         this.location = location;
     }
 
+    public Set<Price> getPrices() {
+        return prices;
+    }
+
+    public void setPrices(Set<Price> prices) {
+        this.prices = prices;
+    }
+
     @Override
     public String toString() {
         return "Show{" +
@@ -110,7 +125,7 @@ public class Show {
                 ", createdIn=" + createdIn +
                 ", bookable=" + bookable +
                 ", location=" + location +
+                ", prices=" + prices +
                 '}';
     }
 }
-
