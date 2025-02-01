@@ -1,6 +1,5 @@
 package be.iccbxl.pid.reservations_springboot.controller;
 
-
 import be.iccbxl.pid.reservations_springboot.model.Show;
 import be.iccbxl.pid.reservations_springboot.service.ShowService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +24,13 @@ public class ShowController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable long id, Model model) {
-        model.addAttribute("show", service.getShow(id));
+    public String show(@PathVariable Long id, Model model, RedirectAttributes redirAttrs) {
+        Show show = service.getShow(id);
+        if (show == null) {
+            redirAttrs.addFlashAttribute("errorMessage", "Spectacle introuvable.");
+            return "redirect:/shows";
+        }
+        model.addAttribute("show", show);
         return "show/show";
     }
 
@@ -46,14 +50,8 @@ public class ShowController {
         return "redirect:/shows";
     }
 
-    @GetMapping("/{id}/edit")
-    public String edit(@PathVariable long id, Model model) {
-        model.addAttribute("show", service.getShow(id));
-        return "show/edit";
-    }
-
     @PutMapping("/{id}/edit")
-    public String update(@Valid @ModelAttribute Show show, BindingResult bindingResult, @PathVariable long id, RedirectAttributes redirAttrs) {
+    public String update(@Valid @ModelAttribute Show show, BindingResult bindingResult, @PathVariable Long id, RedirectAttributes redirAttrs) {
         if (bindingResult.hasErrors()) {
             return "show/edit";
         }
@@ -63,7 +61,7 @@ public class ShowController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable long id, RedirectAttributes redirAttrs) {
+    public String delete(@PathVariable Long id, RedirectAttributes redirAttrs) {
         service.deleteShow(id);
         redirAttrs.addFlashAttribute("successMessage", "Spectacle supprimé avec succès.");
         return "redirect:/shows";

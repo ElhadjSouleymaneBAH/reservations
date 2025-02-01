@@ -1,12 +1,14 @@
 package be.iccbxl.pid.reservations_springboot.model;
 
-
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "roles")
 public class Role {
@@ -15,43 +17,26 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Le nom du rôle est obligatoire.")
-    @Size(min = 2, max = 30, message = "Le rôle doit comporter entre 2 et 30 caractères.")
+    @Column(nullable = false, unique = true)
     private String role;
 
     @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+    private Set<User> users = new HashSet<>();
 
-    // Constructeurs
-    public Role() {}
-
+    // Constructeur pratique
     public Role(String role) {
         this.role = role;
     }
 
-    // Getters et Setters
-    public Long getId() {
-        return id;
+    // Méthodes utilitaires pour gérer la relation
+    public void addUser(User user) {
+        this.users.add(user);
+        user.getRoles().add(this);
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    public void removeUser(User user) {
+        this.users.remove(user);
+        user.getRoles().remove(this);
     }
 
     @Override
@@ -62,4 +47,3 @@ public class Role {
                 '}';
     }
 }
-

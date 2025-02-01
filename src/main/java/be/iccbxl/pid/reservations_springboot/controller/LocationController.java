@@ -1,7 +1,5 @@
 package be.iccbxl.pid.reservations_springboot.controller;
 
-
-
 import be.iccbxl.pid.reservations_springboot.model.Location;
 import be.iccbxl.pid.reservations_springboot.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +25,11 @@ public class LocationController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable long id, Model model) {
-        model.addAttribute("location", service.getLocation(id));
+        Location location = service.getLocation(id);
+        if (location == null) {
+            return "redirect:/locations"; // Redirige si l'emplacement n'existe pas
+        }
+        model.addAttribute("location", location);
         return "location/show";
     }
 
@@ -49,7 +51,11 @@ public class LocationController {
 
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable long id, Model model) {
-        model.addAttribute("location", service.getLocation(id));
+        Location location = service.getLocation(id);
+        if (location == null) {
+            return "redirect:/locations"; // Redirige si l'emplacement n'existe pas
+        }
+        model.addAttribute("location", location);
         return "location/edit";
     }
 

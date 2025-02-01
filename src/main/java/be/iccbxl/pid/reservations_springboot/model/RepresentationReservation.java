@@ -1,7 +1,5 @@
 package be.iccbxl.pid.reservations_springboot.model;
 
-
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -21,8 +19,9 @@ public class RepresentationReservation {
     @JoinColumn(name = "reservation_id", nullable = false)
     private Reservation reservation;  // Relation ManyToOne avec `Reservation`
 
-    @NotNull(message = "Le prix est obligatoire.")
-    private double price;
+    @ManyToOne
+    @JoinColumn(name = "price_id", nullable = false)
+    private Price price;  // Relation ManyToOne avec `Price`
 
     @NotNull(message = "La quantité est obligatoire.")
     private int quantity;
@@ -30,7 +29,7 @@ public class RepresentationReservation {
     // Constructeurs
     public RepresentationReservation() {}
 
-    public RepresentationReservation(Representation representation, Reservation reservation, double price, int quantity) {
+    public RepresentationReservation(Representation representation, Reservation reservation, Price price, int quantity) {
         this.representation = representation;
         this.reservation = reservation;
         this.price = price;
@@ -62,11 +61,11 @@ public class RepresentationReservation {
         this.reservation = reservation;
     }
 
-    public double getPrice() {
+    public Price getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Price price) {
         this.price = price;
     }
 
@@ -89,4 +88,3 @@ public class RepresentationReservation {
                 '}';
     }
 }
-

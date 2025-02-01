@@ -1,6 +1,5 @@
 package be.iccbxl.pid.reservations_springboot.model;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -19,11 +18,11 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;  // Relation ManyToOne avec User
+    private be.iccbxl.pid.reservations_springboot.model.User user;  // Relation ManyToOne avec User
 
     @ManyToOne
     @JoinColumn(name = "show_id", nullable = false)
-    private Show show;  // Relation ManyToOne avec Show
+    private be.iccbxl.pid.reservations_springboot.model.Show show;  // Relation ManyToOne avec Show
 
     @NotBlank(message = "Le contenu du commentaire est obligatoire.")
     @Size(max = 1000, message = "Le contenu du commentaire ne peut dépasser 1000 caractères.")
@@ -41,7 +40,7 @@ public class Review {
     // Constructeurs
     public Review() {}
 
-    public Review(User user, Show show, String review, int stars, boolean validated) {
+    public Review(be.iccbxl.pid.reservations_springboot.model.User user, be.iccbxl.pid.reservations_springboot.model.Show show, String review, int stars, boolean validated) {
         this.user = user;
         this.show = show;
         this.review = review;
@@ -60,19 +59,19 @@ public class Review {
         this.id = id;
     }
 
-    public User getUser() {
+    public be.iccbxl.pid.reservations_springboot.model.User getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(be.iccbxl.pid.reservations_springboot.model.User user) {
         this.user = user;
     }
 
-    public Show getShow() {
+    public be.iccbxl.pid.reservations_springboot.model.Show getShow() {
         return show;
     }
 
-    public void setShow(Show show) {
+    public void setShow(be.iccbxl.pid.reservations_springboot.model.Show show) {
         this.show = show;
     }
 

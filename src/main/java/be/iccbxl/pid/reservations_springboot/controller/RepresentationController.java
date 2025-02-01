@@ -1,31 +1,34 @@
 package be.iccbxl.pid.reservations_springboot.controller;
 
-import be.iccbxl.pid.reservations_springboot.model.Representation;
-import be.iccbxl.pid.reservations_springboot.service.RepresentationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import be.iccbxl.pid.reservations_springboot.model.Representation;
+import be.iccbxl.pid.reservations_springboot.service.RepresentationService;
 
-import jakarta.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/representations")
 public class RepresentationController {
     @Autowired
-    RepresentationService service;
+    private RepresentationService representationService;
 
     @GetMapping
     public String index(Model model) {
-        model.addAttribute("representations", service.getAllRepresentations());
+        List<Representation> representations = representationService.getAllRepresentations();
+        model.addAttribute("representations", representations);
         return "representation/index";
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable long id, Model model) {
-        model.addAttribute("representation", service.getRepresentation(id));
+    public String show(@PathVariable Long id, Model model) {
+        Representation representation = representationService.getRepresentationById(id);
+        if (representation == null) {
+            return "redirect:/representations";
+        }
+        model.addAttribute("representation", representation);
         return "representation/show";
     }
 
@@ -35,37 +38,31 @@ public class RepresentationController {
         return "representation/create";
     }
 
-    @PostMapping("/create")
-    public String store(@Valid @ModelAttribute Representation representation, BindingResult bindingResult, RedirectAttributes redirAttrs) {
-        if (bindingResult.hasErrors()) {
-            return "representation/create";
-        }
-        service.addRepresentation(representation);
-        redirAttrs.addFlashAttribute("successMessage", "Représentation ajoutée avec succès.");
+    @PostMapping
+    public String store(@ModelAttribute Representation representation) {
+        representationService.saveRepresentation(representation);
         return "redirect:/representations";
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(@PathVariable long id, Model model) {
-        model.addAttribute("representation", service.getRepresentation(id));
+    public String edit(@PathVariable Long id, Model model) {
+        Representation representation = representationService.getRepresentationById(id);
+        if (representation == null) {
+            return "redirect:/representations";
+        }
+        model.addAttribute("representation", representation);
         return "representation/edit";
     }
 
-    @PutMapping("/{id}/edit")
-    public String update(@Valid @ModelAttribute Representation representation, BindingResult bindingResult, @PathVariable long id, RedirectAttributes redirAttrs) {
-        if (bindingResult.hasErrors()) {
-            return "representation/edit";
-        }
-        service.updateRepresentation(id, representation);
-        redirAttrs.addFlashAttribute("successMessage", "Représentation mise à jour avec succès.");
+    @PostMapping("/{id}")
+    public String update(@PathVariable Long id, @ModelAttribute Representation representation) {
+        representationService.saveRepresentation(representation);
         return "redirect:/representations";
     }
 
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable long id, RedirectAttributes redirAttrs) {
-        service.deleteRepresentation(id);
-        redirAttrs.addFlashAttribute("successMessage", "Représentation supprimée avec succès.");
+    @GetMapping("/{id}/delete")
+    public String delete(@PathVariable Long id) {
+        representationService.deleteRepresentation(id);
         return "redirect:/representations";
     }
 }
-

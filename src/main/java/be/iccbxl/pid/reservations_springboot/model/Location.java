@@ -1,12 +1,7 @@
 package be.iccbxl.pid.reservations_springboot.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "locations")
@@ -16,76 +11,48 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "La désignation ne peut être vide.")
-    @Size(min = 2, max = 60, message = "La désignation doit être comprise entre 2 et 60 caractères.")
-    private String designation;
+    private String name;
 
-    @NotBlank(message = "L'adresse ne peut être vide.")
-    @Size(min = 5, max = 255, message = "L'adresse doit être comprise entre 5 et 255 caractères.")
     private String address;
 
-    private String website;
-    private String phone;
+    private String city;
 
-    public Location() {}
+    @ManyToOne
+    @JoinColumn(name = "locality_id", nullable = false)
+    private Locality locality; // Relation ManyToOne avec Locality
 
-    public Location(String designation, String address, String website, String phone) {
-        this.designation = designation;
-        this.address = address;
-        this.website = website;
-        this.phone = phone;
+    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Representation> representations; // Relation OneToMany avec Representation
+
+    // Getter pour locality
+    public Locality getLocality() {
+        return locality;
     }
 
-    // Getters et Setters détaillés
-    public Long getId() {
-        return id;
+    // Setter pour locality
+    public void setLocality(Locality locality) {
+        this.locality = locality;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    // Méthodes utilitaires pour OneToMany avec Representation
+    public void addRepresentation(Representation representation) {
+        this.representations.add(representation);
+        representation.setLocation(this);
     }
 
-    public String getDesignation() {
-        return designation;
-    }
-
-    public void setDesignation(String designation) {
-        this.designation = designation;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getWebsite() {
-        return website;
-    }
-
-    public void setWebsite(String website) {
-        this.website = website;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void removeRepresentation(Representation representation) {
+        this.representations.remove(representation);
+        representation.setLocation(null);
     }
 
     @Override
     public String toString() {
         return "Location{" +
                 "id=" + id +
-                ", designation='" + designation + '\'' +
+                ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
-                ", website='" + website + '\'' +
-                ", phone='" + phone + '\'' +
+                ", city='" + city + '\'' +
+                ", locality=" + locality +
                 '}';
     }
 }
-

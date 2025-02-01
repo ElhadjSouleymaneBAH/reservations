@@ -1,11 +1,10 @@
 package be.iccbxl.pid.reservations_springboot.model;
 
-
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "representations")
@@ -20,11 +19,14 @@ public class Representation {
 
     @ManyToOne
     @JoinColumn(name = "show_id", nullable = false)
-    private Show show;  // Relation ManyToOne avec Show
+    private be.iccbxl.pid.reservations_springboot.model.Show show; // Relation ManyToOne avec Show
 
     @ManyToOne
     @JoinColumn(name = "location_id", nullable = false)
-    private Location location;  // Relation ManyToOne avec Location
+    private Location location; // Relation ManyToOne avec Location
+
+    @ManyToMany(mappedBy = "representations")
+    private Set<Reservation> reservations = new HashSet<>(); // Relation ManyToMany avec Reservation
 
     // Constructeurs
     public Representation() {}
@@ -35,7 +37,7 @@ public class Representation {
         this.location = location;
     }
 
-    // Getters et Setters détaillés
+    // Getters, setters et méthodes utilitaires
     public Long getId() {
         return id;
     }
@@ -52,11 +54,11 @@ public class Representation {
         this.schedule = schedule;
     }
 
-    public Show getShow() {
+    public be.iccbxl.pid.reservations_springboot.model.Show getShow() {
         return show;
     }
 
-    public void setShow(Show show) {
+    public void setShow(be.iccbxl.pid.reservations_springboot.model.Show show) {
         this.show = show;
     }
 
@@ -66,6 +68,20 @@ public class Representation {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public Set<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void addReservation(Reservation reservation) {
+        this.reservations.add(reservation);
+        reservation.getRepresentations().add(this);
+    }
+
+    public void removeReservation(Reservation reservation) {
+        this.reservations.remove(reservation);
+        reservation.getRepresentations().remove(this);
     }
 
     @Override
@@ -78,4 +94,3 @@ public class Representation {
                 '}';
     }
 }
-

@@ -1,11 +1,11 @@
 package be.iccbxl.pid.reservations_springboot.model;
 
-
-
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "reservations")
@@ -15,26 +15,29 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;  // Relation ManyToOne avec User
+    @NotBlank(message = "Le nom de l'utilisateur est obligatoire.")
+    private String userName;
 
     @NotNull(message = "La date de réservation est obligatoire.")
     private LocalDateTime bookingDate;
 
-    @NotNull(message = "Le statut est obligatoire.")
-    private String status;
+    @ManyToMany
+    @JoinTable(
+            name = "reservation_representation",
+            joinColumns = @JoinColumn(name = "reservation_id"),
+            inverseJoinColumns = @JoinColumn(name = "representation_id")
+    )
+    private Set<Representation> representations = new HashSet<>(); // Relation ManyToMany avec Representation
 
     // Constructeurs
     public Reservation() {}
 
-    public Reservation(User user, LocalDateTime bookingDate, String status) {
-        this.user = user;
+    public Reservation(String userName, LocalDateTime bookingDate) {
+        this.userName = userName;
         this.bookingDate = bookingDate;
-        this.status = status;
     }
 
-    // Getters et Setters détaillés
+    // Getters, setters, et méthodes utilitaires
     public Long getId() {
         return id;
     }
@@ -43,12 +46,12 @@ public class Reservation {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public LocalDateTime getBookingDate() {
@@ -59,21 +62,26 @@ public class Reservation {
         this.bookingDate = bookingDate;
     }
 
-    public String getStatus() {
-        return status;
+    public Set<Representation> getRepresentations() {
+        return representations;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void addRepresentation(Representation representation) {
+        this.representations.add(representation);
+        representation.getReservations().add(this);
+    }
+
+    public void removeRepresentation(Representation representation) {
+        this.representations.remove(representation);
+        representation.getReservations().remove(this);
     }
 
     @Override
     public String toString() {
         return "Reservation{" +
                 "id=" + id +
-                ", user=" + user +
+                ", userName='" + userName + '\'' +
                 ", bookingDate=" + bookingDate +
-                ", status='" + status + '\'' +
                 '}';
     }
 }

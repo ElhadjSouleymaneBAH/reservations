@@ -1,34 +1,36 @@
 package be.iccbxl.pid.reservations_springboot.service;
 
-import be.iccbxl.pid.reservations_springboot.model.User;
-import be.iccbxl.pid.reservations_springboot.repository.UserRepository;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import be.iccbxl.pid.reservations_springboot.model.User;
+import be.iccbxl.pid.reservationsspringboot.repository.UserRepository;
 
 @Service
 public class UserService {
     @Autowired
-    private UserRepository repository;
+    private UserRepository userRepository;
 
     public List<User> getAllUsers() {
-        return repository.findAll();
+        List<User> users = new ArrayList<>();
+        userRepository.findAll().forEach(users::add);
+        return users;
     }
 
     public User getUser(long id) {
-        return repository.findById(id);
+        return userRepository.findById(id);
     }
 
     public void addUser(User user) {
-        repository.save(user);
+        userRepository.save(user);
     }
 
     public void updateUser(long id, User user) {
-        repository.save(user);
+        userRepository.save(user);
     }
 
     public void deleteUser(long id) {
-        repository.deleteById(id);
+        userRepository.deleteById(id);
     }
 }

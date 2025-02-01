@@ -1,36 +1,38 @@
 package be.iccbxl.pid.reservations_springboot.service;
 
-
-
-import be.iccbxl.pid.reservations_springboot.model.Location;
-import be.iccbxl.pid.reservations_springboot.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import be.iccbxl.pid.reservations_springboot.model.Location;
+import be.iccbxl.pid.reservations_springboot.repository.LocationRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LocationService {
     @Autowired
-    private LocationRepository repository;
+    private LocationRepository locationRepository;
 
     public List<Location> getAllLocations() {
-        return repository.findAll();
+        return locationRepository.findAll();
     }
 
-    public Location getLocation(long id) {
-        return repository.findById(id);
+    public Location getLocation(Long id) { // Correction du nom de la méthode
+        Optional<Location> location = locationRepository.findById(id);
+        return location.orElse(null); // Retourne null si non trouvé
     }
 
-    public void addLocation(Location location) {
-        repository.save(location);
+    public void addLocation(Location location) { // Correction du nom pour cohérence
+        locationRepository.save(location);
     }
 
-    public void updateLocation(long id, Location location) {
-        repository.save(location);
+    public void updateLocation(Long id, Location location) {
+        if (locationRepository.existsById(id)) {
+            locationRepository.save(location);
+        }
     }
 
-    public void deleteLocation(long id) {
-        repository.deleteById(id);
+    public void deleteLocation(Long id) {
+        locationRepository.deleteById(id);
     }
 }

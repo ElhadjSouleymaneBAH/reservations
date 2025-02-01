@@ -1,13 +1,12 @@
 package be.iccbxl.pid.reservations_springboot.service;
 
-
-
 import be.iccbxl.pid.reservations_springboot.model.Show;
 import be.iccbxl.pid.reservations_springboot.repository.ShowRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ShowService {
@@ -18,19 +17,19 @@ public class ShowService {
         return repository.findAll();
     }
 
-    public Show getShow(long id) {
-        return repository.findById(id);
+    public Show getShow(Long id) {
+        return repository.findById(id).orElse(null);
     }
 
     public void addShow(Show show) {
         repository.save(show);
     }
 
-    public void updateShow(long id, Show show) {
+    public void updateShow(Long id, Show show) {
         repository.save(show);
     }
 
-    public void deleteShow(long id) {
+    public void deleteShow(Long id) {
         repository.deleteById(id);
     }
 

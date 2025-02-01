@@ -1,12 +1,7 @@
 package be.iccbxl.pid.reservations_springboot.model;
 
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.persistence.Id;
 
 @Entity
 @Table(name = "types")
@@ -18,14 +13,14 @@ public class Type {
     @NotBlank(message = "Le type est obligatoire.")
     private String type;
 
-    // Constructeurs
+    //  Constructeurs
     public Type() {}
 
     public Type(String type) {
         this.type = type;
     }
 
-    // Getters
+    //  Getters and setters
     public Long getId() {
         return id;
     }
@@ -34,12 +29,21 @@ public class Type {
         return type;
     }
 
-    // Setters
+
     public void setId(Long id) {
         this.id = id;
     }
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    //  toString()
+    @Override
+    public String toString() {
+        return "Type{" +
+                "id=" + id +
+                ", type='" + type + '\'' +
+                '}';
     }
 }

@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "prices")
@@ -25,6 +27,9 @@ public class Price {
     private LocalDate startDate;
     private LocalDate endDate;
 
+    @ManyToMany(mappedBy = "prices")
+    private Set<be.iccbxl.pid.reservations_springboot.model.Show> shows = new HashSet<>(); // Relation ManyToMany avec Show
+
     // Constructeurs
     public Price() {}
 
@@ -35,7 +40,7 @@ public class Price {
         this.endDate = endDate;
     }
 
-    // Getters et Setters détaillés
+    // Getters et Setters
     public Long getId() {
         return id;
     }
@@ -76,6 +81,21 @@ public class Price {
         this.endDate = endDate;
     }
 
+    public Set<be.iccbxl.pid.reservations_springboot.model.Show> getShows() {
+        return shows;
+    }
+
+    // Méthodes utilitaires pour ManyToMany avec Show
+    public void addShow(be.iccbxl.pid.reservations_springboot.model.Show show) {
+        this.shows.add(show);
+        show.getPrices().add(this);
+    }
+
+    public void removeShow(be.iccbxl.pid.reservations_springboot.model.Show show) {
+        this.shows.remove(show);
+        show.getPrices().remove(this);
+    }
+
     @Override
     public String toString() {
         return "Price{" +
@@ -87,4 +107,3 @@ public class Price {
                 '}';
     }
 }
-

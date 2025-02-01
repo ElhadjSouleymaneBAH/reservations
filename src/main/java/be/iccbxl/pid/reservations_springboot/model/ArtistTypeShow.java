@@ -17,12 +17,12 @@ public class ArtistTypeShow {
 
     @ManyToOne
     @JoinColumn(name = "show_id", nullable = false)
-    private Show show;  // Relation ManyToOne avec `Show`
+    private be.iccbxl.pid.reservations_springboot.model.Show show;  // Relation ManyToOne avec `Show`
 
     // Constructeurs
     public ArtistTypeShow() {}
 
-    public ArtistTypeShow(ArtistType artistType, Show show) {
+    public ArtistTypeShow(ArtistType artistType, be.iccbxl.pid.reservations_springboot.model.Show show) {
         this.artistType = artistType;
         this.show = show;
     }
@@ -44,11 +44,11 @@ public class ArtistTypeShow {
         this.artistType = artistType;
     }
 
-    public Show getShow() {
+    public be.iccbxl.pid.reservations_springboot.model.Show getShow() {
         return show;
     }
 
-    public void setShow(Show show) {
+    public void setShow(be.iccbxl.pid.reservations_springboot.model.Show show) {
         this.show = show;
     }
 

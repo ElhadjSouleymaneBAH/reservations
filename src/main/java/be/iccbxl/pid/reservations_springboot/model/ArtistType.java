@@ -1,6 +1,5 @@
 package be.iccbxl.pid.reservations_springboot.model;
 
-
 import jakarta.persistence.*;
 
 @Entity
@@ -13,13 +12,13 @@ public class ArtistType {
 
     @ManyToOne
     @JoinColumn(name = "artist_id", nullable = false)
-    private Artist artist;  // Relation ManyToOne avec `Artist`
+    private Artist artist;
 
     @ManyToOne
     @JoinColumn(name = "type_id", nullable = false)
-    private Type type;  // Relation ManyToOne avec `Type`
+    private Type type;
 
-    // Constructeurs
+    //  Constructeurs
     public ArtistType() {}
 
     public ArtistType(Artist artist, Type type) {
@@ -27,38 +26,43 @@ public class ArtistType {
         this.type = type;
     }
 
-    // Getters et Setters détaillés
+    //  Getters
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Artist getArtist() {
         return artist;
     }
 
-    public void setArtist(Artist artist) {
-        this.artist = artist;
-    }
-
     public Type getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    //  Méthodes pour gérer les relations
+    public void addArtist(Artist artist) {
+        this.artist = artist;
+    }
+
+    public void removeArtist() {
+        this.artist = null;
+    }
+
+    public void addType(Type type) {
         this.type = type;
     }
 
+    public void removeType() {
+        this.type = null;
+    }
+
+    //  toString()
     @Override
     public String toString() {
         return "ArtistType{" +
                 "id=" + id +
-                ", artist=" + artist +
-                ", type=" + type +
+                ", artist=" + (artist != null ? artist.getId() : "null") +
+                ", type=" + (type != null ? type.getType() : "null") +
                 '}';
     }
 }
-

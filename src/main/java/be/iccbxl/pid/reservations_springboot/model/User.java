@@ -1,14 +1,16 @@
 package be.iccbxl.pid.reservations_springboot.model;
 
-
-
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
@@ -17,112 +19,64 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Le login est obligatoire.")
-    @Size(min = 2, max = 30, message = "Le login doit comporter entre 2 et 30 caractères.")
+    @Column(nullable = false, unique = true)
     private String login;
 
-    @NotBlank(message = "Le mot de passe est obligatoire.")
-    @Size(min = 8, message = "Le mot de passe doit comporter au moins 8 caractères.")
+    @Column(nullable = false)
     private String password;
 
-    @NotBlank(message = "Le prénom est obligatoire.")
-    @Size(min = 2, max = 60, message = "Le prénom doit comporter entre 2 et 60 caractères.")
+    @Column(nullable = false)
     private String firstname;
 
-    @NotBlank(message = "Le nom est obligatoire.")
-    @Size(min = 2, max = 60, message = "Le nom doit comporter entre 2 et 60 caractères.")
+    @Column(nullable = false)
     private String lastname;
 
-    @NotBlank(message = "L'email est obligatoire.")
-    @Email(message = "L'email doit être valide.")
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Size(max = 2, message = "La langue doit être de 2 caractères (par ex : 'fr').")
+    @Column(nullable = false)
     private String langue;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private be.iccbxl.pid.reservations_springboot.model.UserRole role;
+
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @ManyToMany
     @JoinTable(
             name = "role_user",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<Role> roles;  // Relation ManyToMany avec Role
+    private Set<Role> roles = new HashSet<>();
 
-    // Constructeurs
-    public User() {}
-
-    public User(String login, String password, String firstname, String lastname, String email, String langue) {
+    // Constructeur pratique
+    public User(String login, String password, String firstname, String lastname, String email, String langue, UserRole role) {
         this.login = login;
         this.password = password;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.langue = langue;
+        this.role = role;
     }
 
-    // Getters et Setters
-    public Long getId() {
-        return id;
+    // Ajout et suppression de rôles
+    public void addRole(Role role) {
+        this.roles.add(role);
+        role.getUsers().add(this);
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getLangue() {
-        return langue;
-    }
-
-    public void setLangue(String langue) {
-        this.langue = langue;
+    public void removeRole(Role role) {
+        this.roles.remove(role);
+        role.getUsers().remove(this);
     }
 
     public Set<Role> getRoles() {
         return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
     }
 
     @Override
@@ -134,7 +88,9 @@ public class User {
                 ", lastname='" + lastname + '\'' +
                 ", email='" + email + '\'' +
                 ", langue='" + langue + '\'' +
+                ", role=" + role +
                 ", roles=" + roles +
+                ", createdAt=" + createdAt +
                 '}';
     }
 }
