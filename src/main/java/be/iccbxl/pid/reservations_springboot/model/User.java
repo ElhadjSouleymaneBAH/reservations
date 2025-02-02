@@ -37,6 +37,9 @@ public class User {
     @Column(nullable = false)
     private String langue;
 
+    @Column(name = "profile_picture") // Ajout pour gérer l'image de profil
+    private String profilePicturePath;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private be.iccbxl.pid.reservations_springboot.model.UserRole role;
@@ -54,7 +57,7 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     // Constructeur pratique
-    public User(String login, String password, String firstname, String lastname, String email, String langue, UserRole role) {
+    public User(String login, String password, String firstname, String lastname, String email, String langue, UserRole role, String profilePicturePath) {
         this.login = login;
         this.password = password;
         this.firstname = firstname;
@@ -62,6 +65,7 @@ public class User {
         this.email = email;
         this.langue = langue;
         this.role = role;
+        this.profilePicturePath = profilePicturePath;
     }
 
     // Ajout et suppression de rôles
@@ -88,6 +92,7 @@ public class User {
                 ", lastname='" + lastname + '\'' +
                 ", email='" + email + '\'' +
                 ", langue='" + langue + '\'' +
+                ", profilePicturePath='" + profilePicturePath + '\'' +
                 ", role=" + role +
                 ", roles=" + roles +
                 ", createdAt=" + createdAt +
