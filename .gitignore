@@ -14,7 +14,7 @@ target/
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
+.idea/
 *.iws
 *.iml
 *.ipr
@@ -25,9 +25,26 @@ target/
 /dist/
 /nbdist/
 /.nb-gradle/
+
+### Build & Compilation ###
 build/
+out/
 !**/src/main/**/build/
 !**/src/test/**/build/
+*.class
+*.jar
+*.war
+*.ear
+
+### Fichiers temporaires et logs ###
+*.log
+*.tmp
+*.bak
+*.swp
 
 ### VS Code ###
 .vscode/
+
+### Fichiers système spécifiques ###
+.DS_Store
+Thumbs.db

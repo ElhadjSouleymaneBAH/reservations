@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Created-By: IntelliJ IDEA
-Built-By: Souleymane
-Build-Jdk: Oracle OpenJDK 21.0.1
-Implementation-Title: reservations-springboot
-Implementation-Version: 0.0.1-SNAPSHOT
-Implementation-Vendor-Id: be.iccbxl.pid
-Main-Class: ${start-class}
-
