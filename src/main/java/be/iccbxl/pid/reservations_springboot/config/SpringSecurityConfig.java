@@ -10,11 +10,12 @@ import org.springframework.security.web.authentication.LoginUrlAuthenticationEnt
 @Configuration
 @EnableMethodSecurity(prePostEnabled = true)
 public class SpringSecurityConfig {
-    //…
+
 
     @Bean
     public SecurityFilterChain configure(final HttpSecurity http) throws Exception {
         return http.cors(Customizer.withDefaults())
+
                 //.csrf(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())	//Désactiver la protection des formulaires
 

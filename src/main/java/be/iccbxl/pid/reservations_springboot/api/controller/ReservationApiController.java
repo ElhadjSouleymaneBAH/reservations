@@ -31,8 +31,7 @@ public class ReservationApiController {
                 .map(assembler::toModel)
                 .collect(Collectors.toList());
 
-        return CollectionModel.of(reservations,
-                linkTo(methodOn(ReservationApiController.class).getAllReservations()).withSelfRel());
+        return CollectionModel.of(reservations, linkTo(methodOn(ReservationApiController.class).getAllReservations()).withSelfRel());
     }
 
     @GetMapping("/{id}")
@@ -41,6 +40,16 @@ public class ReservationApiController {
                 .orElseThrow(() -> new RuntimeException("Réservation non trouvée"));
 
         return assembler.toModel(reservation);
+    }
+
+    // Récupérer les réservations d’un utilisateur
+    @GetMapping("/user/{userId}")
+    public CollectionModel<EntityModel<Reservation>> getReservationsByUser(@PathVariable Long userId) {
+        List<EntityModel<Reservation>> reservations = repository.findByUserId(userId).stream()
+                .map(assembler::toModel)
+                .collect(Collectors.toList());
+
+        return CollectionModel.of(reservations, linkTo(methodOn(ReservationApiController.class).getReservationsByUser(userId)).withSelfRel());
     }
 
     @PostMapping
