@@ -21,23 +21,28 @@ public class Reservation {
     @NotNull(message = "La date de réservation est obligatoire.")
     private LocalDateTime bookingDate;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ReservationStatus status; // Ajout du statut
+
     @ManyToMany
     @JoinTable(
             name = "reservation_representation",
             joinColumns = @JoinColumn(name = "reservation_id"),
             inverseJoinColumns = @JoinColumn(name = "representation_id")
     )
-    private Set<Representation> representations = new HashSet<>(); // Relation ManyToMany avec Representation
+    private Set<Representation> representations = new HashSet<>();
 
     // Constructeurs
     public Reservation() {}
 
-    public Reservation(String userName, LocalDateTime bookingDate) {
+    public Reservation(String userName, LocalDateTime bookingDate, ReservationStatus status) {
         this.userName = userName;
         this.bookingDate = bookingDate;
+        this.status = status;
     }
 
-    // Getters, setters, et méthodes utilitaires
+    // Getters & Setters
     public Long getId() {
         return id;
     }
@@ -62,6 +67,14 @@ public class Reservation {
         this.bookingDate = bookingDate;
     }
 
+    public ReservationStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ReservationStatus status) {
+        this.status = status;
+    }
+
     public Set<Representation> getRepresentations() {
         return representations;
     }
@@ -82,6 +95,7 @@ public class Reservation {
                 "id=" + id +
                 ", userName='" + userName + '\'' +
                 ", bookingDate=" + bookingDate +
+                ", status=" + status +
                 '}';
     }
 }

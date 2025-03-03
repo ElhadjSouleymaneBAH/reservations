@@ -1,6 +1,5 @@
 package be.iccbxl.pid.reservations_springboot.service;
 
-
 import be.iccbxl.pid.reservations_springboot.model.Reservation;
 import be.iccbxl.pid.reservations_springboot.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -15,6 +15,7 @@ public class ReservationModelAssembler implements RepresentationModelAssembler<R
     public EntityModel<Reservation> toModel(Reservation reservation) {
         return EntityModel.of(reservation,
                 linkTo(methodOn(ReservationApiController.class).getReservationById(reservation.getId())).withSelfRel(),
-                linkTo(methodOn(ReservationApiController.class).getAllReservations()).withRel("reservations"));
+                linkTo(methodOn(ReservationApiController.class).getAllReservations()).withRel("reservations"),
+                linkTo(methodOn(ReservationApiController.class).getReservationDetails(reservation.getId())).withRel("details"));
     }
 }

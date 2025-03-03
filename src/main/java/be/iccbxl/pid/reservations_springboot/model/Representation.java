@@ -19,25 +19,30 @@ public class Representation {
 
     @ManyToOne
     @JoinColumn(name = "show_id", nullable = false)
-    private be.iccbxl.pid.reservations_springboot.model.Show show; // Relation ManyToOne avec Show
+    private Show show;
 
     @ManyToOne
     @JoinColumn(name = "location_id", nullable = false)
-    private Location location; // Relation ManyToOne avec Location
+    private Location location;
 
     @ManyToMany(mappedBy = "representations")
-    private Set<Reservation> reservations = new HashSet<>(); // Relation ManyToMany avec Reservation
+    private Set<Reservation> reservations = new HashSet<>();
+
+    private int availableSeats; // Ajout pour les places disponibles
+    private double price; // Ajout pour le prix
 
     // Constructeurs
     public Representation() {}
 
-    public Representation(LocalDateTime schedule, Show show, Location location) {
+    public Representation(LocalDateTime schedule, Show show, Location location, int availableSeats, double price) {
         this.schedule = schedule;
         this.show = show;
         this.location = location;
+        this.availableSeats = availableSeats;
+        this.price = price;
     }
 
-    // Getters, setters et méthodes utilitaires
+    // Getters & Setters
     public Long getId() {
         return id;
     }
@@ -54,11 +59,11 @@ public class Representation {
         this.schedule = schedule;
     }
 
-    public be.iccbxl.pid.reservations_springboot.model.Show getShow() {
+    public Show getShow() {
         return show;
     }
 
-    public void setShow(be.iccbxl.pid.reservations_springboot.model.Show show) {
+    public void setShow(Show show) {
         this.show = show;
     }
 
@@ -74,14 +79,20 @@ public class Representation {
         return reservations;
     }
 
-    public void addReservation(Reservation reservation) {
-        this.reservations.add(reservation);
-        reservation.getRepresentations().add(this);
+    public int getAvailableSeats() {
+        return availableSeats;
     }
 
-    public void removeReservation(Reservation reservation) {
-        this.reservations.remove(reservation);
-        reservation.getRepresentations().remove(this);
+    public void setAvailableSeats(int availableSeats) {
+        this.availableSeats = availableSeats;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     @Override
@@ -91,6 +102,8 @@ public class Representation {
                 ", schedule=" + schedule +
                 ", show=" + show +
                 ", location=" + location +
+                ", availableSeats=" + availableSeats +
+                ", price=" + price +
                 '}';
     }
 }
