@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReviewService {
@@ -16,7 +17,7 @@ public class ReviewService {
         return repository.findAll();
     }
 
-    public Review getReview(long id) {
+    public Optional<Review> getReview(long id) {
         return repository.findById(id);
     }
 
@@ -32,11 +33,21 @@ public class ReviewService {
         repository.save(review);
     }
 
-    public void updateReview(long id, Review review) {
-        repository.save(review);
+    public boolean updateReview(long id, Review review) {
+        return repository.findById(id).map(existingReview -> {
+            existingReview.setReview(review.getReview());
+            existingReview.setStars(review.getStars());
+            existingReview.setValidated(review.isValidated());
+            repository.save(existingReview);
+            return true;
+        }).orElse(false);
     }
 
-    public void deleteReview(long id) {
-        repository.deleteById(id);
+    public boolean deleteReview(long id) {
+        if (repository.existsById(id)) {
+            repository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

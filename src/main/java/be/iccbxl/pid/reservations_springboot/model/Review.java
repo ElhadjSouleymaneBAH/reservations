@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,11 +17,11 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private be.iccbxl.pid.reservations_springboot.model.User user;  // Relation ManyToOne avec User
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "show_id", nullable = false)
-    private be.iccbxl.pid.reservations_springboot.model.Show show;  // Relation ManyToOne avec Show
+    private Show show;
 
     @NotBlank(message = "Le contenu du commentaire est obligatoire.")
     @Size(max = 1000, message = "Le contenu du commentaire ne peut dépasser 1000 caractères.")
@@ -30,17 +29,16 @@ public class Review {
 
     @Min(1)
     @Max(5)
-    private int stars;  // Note entre 1 et 5 étoiles
+    private int stars;
 
-    private boolean validated;  // Statut de validation
+    private boolean validated;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    // Constructeurs
     public Review() {}
 
-    public Review(be.iccbxl.pid.reservations_springboot.model.User user, be.iccbxl.pid.reservations_springboot.model.Show show, String review, int stars, boolean validated) {
+    public Review(User user, Show show, String review, int stars, boolean validated) {
         this.user = user;
         this.show = show;
         this.review = review;
@@ -50,83 +48,31 @@ public class Review {
         this.updatedAt = LocalDateTime.now();
     }
 
-    // Getters et Setters détaillés
     public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public be.iccbxl.pid.reservations_springboot.model.User getUser() {
-        return user;
-    }
-
-    public void setUser(be.iccbxl.pid.reservations_springboot.model.User user) {
-        this.user = user;
-    }
-
-    public be.iccbxl.pid.reservations_springboot.model.Show getShow() {
-        return show;
-    }
-
-    public void setShow(be.iccbxl.pid.reservations_springboot.model.Show show) {
-        this.show = show;
-    }
-
+        return id; }
+    public void setId(Long id) { this.id = id; }
+    public User getUser() {
+        return user; }
+    public void setUser(User user) { this.user = user; }
+    public Show getShow() {
+        return show; }
+    public void setShow(Show show) { this.show = show; }
     public String getReview() {
-        return review;
-    }
-
-    public void setReview(String review) {
-        this.review = review;
-    }
-
+        return review; }
+    public void setReview(String review) { this.review = review; }
     public int getStars() {
-        return stars;
-    }
-
-    public void setStars(int stars) {
-        this.stars = stars;
-    }
-
+        return stars; }
+    public void setStars(int stars) { this.stars = stars; }
     public boolean isValidated() {
-        return validated;
-    }
-
+        return validated; }
     public void setValidated(boolean validated) {
-        this.validated = validated;
-    }
-
+        this.validated = validated; }
     public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
+        return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
+        this.createdAt = createdAt; }
     public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
+        return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    @Override
-    public String toString() {
-        return "Review{" +
-                "id=" + id +
-                ", user=" + user +
-                ", show=" + show +
-                ", review='" + review + '\'' +
-                ", stars=" + stars +
-                ", validated=" + validated +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
-    }
+        this.updatedAt = updatedAt; }
 }
-

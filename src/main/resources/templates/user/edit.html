@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Modifier l'utilisateur</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<h2>Modifier l'utilisateur</h2>
+
+<form th:action="@{/users/update}" th:object="${user}" method="post">
+  <input type="hidden" th:field="*{id}">
+
+  <label for="login">Login:</label>
+  <input type="text" id="login" th:field="*{login}" required>
+
+  <label for="firstName">Prénom:</label>
+  <input type="text" id="firstName" th:field="*{firstName}" required>
+
+  <label for="lastName">Nom:</label>
+  <input type="text" id="lastName" th:field="*{lastName}" required>
+
+  <label for="email">Email:</label>
+  <input type="email" id="email" th:field="*{email}" required>
+
+  <label for="langue">Langue:</label>
+  <select id="langue" th:field="*{langue}">
+    <option value="fr">Français</option>
+    <option value="en">English</option>
+  </select>
+
+  <label for="role">Rôle:</label>
+  <select id="role" th:field="*{role}">
+    <option value="USER">Utilisateur</option>
+    <option value="ADMIN">Administrateur</option>
+  </select>
+
+  <button type="submit">Sauvegarder</button>
+</form>
+
+<!-- Bouton retour si défini -->
+<a th:if="${back != null}" th:href="${back}">Retour</a>
+
+</body>
+</html>

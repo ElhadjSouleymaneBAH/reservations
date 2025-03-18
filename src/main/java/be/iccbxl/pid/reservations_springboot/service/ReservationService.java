@@ -9,6 +9,7 @@ import java.util.List;
 
 @Service
 public class ReservationService {
+
     @Autowired
     private ReservationRepository repository;
 
@@ -17,7 +18,8 @@ public class ReservationService {
     }
 
     public Reservation getReservation(long id) {
-        return repository.findById(id);
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Réservation non trouvée avec l'ID : " + id));
     }
 
     public void addReservation(Reservation reservation) {
@@ -25,12 +27,18 @@ public class ReservationService {
     }
 
     public void updateReservation(long id, Reservation reservation) {
-        repository.save(reservation);
+        if (repository.existsById(id)) {
+            repository.save(reservation);
+        } else {
+            throw new RuntimeException("Impossible de mettre à jour : Réservation non trouvée avec l'ID : " + id);
+        }
     }
 
     public void deleteReservation(long id) {
-        repository.deleteById(id);
+        if (repository.existsById(id)) {
+            repository.deleteById(id);
+        } else {
+            throw new RuntimeException("Impossible de supprimer : Réservation non trouvée avec l'ID : " + id);
+        }
     }
 }
-
-
