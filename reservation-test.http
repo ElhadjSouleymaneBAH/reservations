@@ -1,0 +1,6 @@
+### Liste des spectacles
+GET http://localhost:9090/api/shows
+Accept: application/json
+
+
+

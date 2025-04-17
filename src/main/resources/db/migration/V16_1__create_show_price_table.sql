@@ -1,6 +1,6 @@
 CREATE TABLE show_price (
-                            show_id BIGINT NOT NULL,
-                            price_id BIGINT NOT NULL,
+                            show_id INT NOT NULL,
+                            price_id INT NOT NULL,
                             PRIMARY KEY (show_id, price_id),
                             FOREIGN KEY (show_id) REFERENCES shows(id) ON DELETE CASCADE,
                             FOREIGN KEY (price_id) REFERENCES prices(id) ON DELETE CASCADE
