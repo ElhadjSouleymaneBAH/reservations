@@ -1,9 +1,9 @@
 CREATE TABLE reviews (
-                         id INT(11) NOT NULL AUTO_INCREMENT,
-                         user_id INT(11) NOT NULL,
-                         show_id INT(11) NOT NULL,
+                         id BIGINT (11) NOT NULL AUTO_INCREMENT,
+                         user_id BIGINT (11) NOT NULL,
+                         show_id BIGINT (11) NOT NULL,
                          review VARCHAR(1000) NOT NULL,
-                         stars TINYINT UNSIGNED NOT NULL CHECK (stars BETWEEN 1 AND 5),
+                         stars INTEGER NOT NULL CHECK (stars BETWEEN 1 AND 5),
                          validated TINYINT(1) NOT NULL DEFAULT 0,
                          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                          updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

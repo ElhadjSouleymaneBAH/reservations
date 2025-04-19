@@ -1,34 +1,54 @@
 <template>
-  <div class="container mt-5">
-    <h1 class="text-center mb-4">Gestion des Réservations</h1>
+  <div>
+    <!-- Bandeau utilisateur connecté -->
+    <div class="bg-light border-bottom p-3 d-flex justify-content-between align-items-center">
+      <div>
+        <router-link to="/" class="btn btn-outline-secondary btn-sm me-2">
+          Catalogue
+        </router-link>
+        <router-link to="/catalogue-notag" class="btn btn-outline-danger btn-sm">
+          Sans mot-clé
+        </router-link>
+      </div>
 
-    <!-- Section des boutons d'action -->
-    <div class="text-center mb-4">
-      <button class="btn btn-primary me-2">Gérer mes Réservations</button>
-      <button class="btn btn-success">Ajouter une Réservation</button>
+      <div v-if="user">
+        Connecté en tant que <strong>{{ user.login }}</strong>
+        <button class="btn btn-sm btn-outline-danger ms-3" @click="logout">
+          Se déconnecter
+        </button>
+      </div>
+      <div v-else>
+        <router-link to="/login" class="btn btn-sm btn-primary">Se connecter</router-link>
+      </div>
     </div>
 
-    <!-- Composant Liste des Réservations -->
-    <ReservationList />
+    <!-- Affichage de la vue active -->
+    <router-view />
   </div>
 </template>
 
-<script>
-import ReservationList from "./components/ReservationList.vue";
+<script setup>
+import { ref, onMounted } from 'vue'
 
-export default {
-  components: {
-    ReservationList,
-  },
-};
+const user = ref(null)
+
+const logout = () => {
+  localStorage.removeItem('user')
+  location.reload()
+}
+
+onMounted(() => {
+  const stored = localStorage.getItem('user')
+  if (stored) {
+    user.value = JSON.parse(stored)
+  }
+})
 </script>
 
 <style>
 body {
   background-color: #f8f9fa;
-}
-.container {
-  max-width: 800px;
-  margin: auto;
+  margin: 0;
+  font-family: "Segoe UI", Roboto, sans-serif;
 }
 </style>

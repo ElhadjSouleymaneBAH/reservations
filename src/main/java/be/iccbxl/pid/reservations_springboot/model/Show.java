@@ -3,13 +3,14 @@ package be.iccbxl.pid.reservations_springboot.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "shows")
-
 public class Show {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,8 +24,12 @@ public class Show {
     private String posterUrl;
 
     private int duration;
-    private int createdIn;
+    private Date createdIn;
     private boolean bookable;
+
+    @ManyToOne
+    @JoinColumn(name = "location_id", nullable = false)
+    private Location location;
 
     @OneToMany(mappedBy = "show")
     private List<Representation> representations;
@@ -32,21 +37,25 @@ public class Show {
     @OneToMany(mappedBy = "show")
     private List<Review> reviews;
 
-    @ManyToOne
-    @JoinColumn(name = "location_id", nullable = false)
-    private Location location;
-
     @ManyToMany
     @JoinTable(
-            name = "show_price",
+            name = "price_shows",
             joinColumns = @JoinColumn(name = "show_id"),
             inverseJoinColumns = @JoinColumn(name = "price_id")
     )
     private Set<Price> prices = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "show_tags",
+            joinColumns = @JoinColumn(name = "show_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> tags = new HashSet<>();
+
     public Show() {}
 
-    public Show(String title, String posterUrl, int duration, int createdIn, boolean bookable, Location location) {
+    public Show(String title, String posterUrl, int duration, Date createdIn, boolean bookable, Location location) {
         this.title = title;
         this.posterUrl = posterUrl;
         this.duration = duration;
@@ -55,15 +64,52 @@ public class Show {
         this.location = location;
     }
 
-    public Long getId() { return id; }
-    public String getTitle() { return title; }
-    public String getPosterUrl() { return posterUrl; }
-    public int getDuration() { return duration; }
-    public int getCreatedIn() { return createdIn; }
-    public boolean isBookable() { return bookable; }
-    public Location getLocation() { return location; }
-    public Set<Price> getPrices() { return prices; }
+    // Getters
+    public Long getId() {
+        return id;
+    }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getPosterUrl() {
+        return posterUrl;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public Date getCreatedIn() {
+        return createdIn;
+    }
+
+    public boolean isBookable() {
+        return bookable;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public Set<Price> getPrices() {
+        return prices;
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public List<Representation> getRepresentations() {
+        return representations;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    // Price management
     public void addPrice(Price price) {
         if (!this.prices.contains(price)) {
             this.prices.add(price);
@@ -78,6 +124,17 @@ public class Show {
         }
     }
 
+    // Tag management
+    public void addTag(Tag tag) {
+        this.tags.add(tag);
+        tag.getShows().add(this);
+    }
+
+    public void removeTag(Tag tag) {
+        this.tags.remove(tag);
+        tag.getShows().remove(this);
+    }
+
     @Override
     public String toString() {
         return "Show{" +
@@ -88,9 +145,6 @@ public class Show {
                 ", createdIn=" + createdIn +
                 ", bookable=" + bookable +
                 ", location=" + location +
-                ", prices=" + prices +
                 '}';
     }
-
-
 }

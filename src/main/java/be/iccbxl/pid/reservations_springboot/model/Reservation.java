@@ -27,7 +27,7 @@ public class Reservation {
 
     @ManyToMany
     @JoinTable(
-            name = "reservation_representation",
+            name = "representation_reservation",
             joinColumns = @JoinColumn(name = "reservation_id"),
             inverseJoinColumns = @JoinColumn(name = "representation_id")
     )

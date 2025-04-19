@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import be.iccbxl.pid.reservations_springboot.model.User;
-import be.iccbxl.pid.reservationsspringboot.repository.UserRepository;
+import be.iccbxl.pid.reservations_springboot.repository.UserRepository;
 
 @Service
 public class UserService {

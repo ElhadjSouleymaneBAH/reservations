@@ -12,7 +12,7 @@ public class ArtistTypeShow {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "artiste_type_id", nullable = false)
+    @JoinColumn(name = "artist_type_id", nullable = false)
     private ArtistType artistType;  // Relation ManyToOne avec `ArtistType`
 
     @ManyToOne
