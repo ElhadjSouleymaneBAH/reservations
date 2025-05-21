@@ -1,11 +1,6 @@
 package be.iccbxl.pid.reservations_springboot.model;
 
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -25,13 +20,18 @@ public class Artist {
     @Size(min = 2, max = 60, message = "The lastname must be between 2 and 60 characters long.")
     private String lastname;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "troupe_id", nullable = true)
+    private Troupe troupe;
+
     // Constructeur protégé pour JPA
     public Artist() {}
 
-    // Constructeur avec paramètres pour faciliter la création d'instances
-    public Artist(String firstname, String lastname) {
+    // Constructeur avec paramètres
+    public Artist(String firstname, String lastname, Troupe troupe) {
         this.firstname = firstname;
         this.lastname = lastname;
+        this.troupe = troupe;
     }
 
     // Getters et Setters
@@ -59,13 +59,21 @@ public class Artist {
         this.lastname = lastname;
     }
 
-    // Méthode toString pour afficher l'objet Artist en tant que chaîne
+    public Troupe getTroupe() {
+        return troupe;
+    }
+
+    public void setTroupe(Troupe troupe) {
+        this.troupe = troupe;
+    }
+
     @Override
     public String toString() {
         return "Artist{" +
                 "id=" + id +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
+                ", troupe=" + (troupe != null ? troupe.getName() : "none") +
                 '}';
     }
 }

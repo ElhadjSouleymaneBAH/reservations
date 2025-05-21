@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Affiliation Artiste-Troupe</title>
+</head>
+<body>
+<h1>Affilier un artiste à une troupe</h1>
+<form th:action="@{/admin/affiliate}" method="post">
+  <label for="artistId">Artiste :</label>
+  <select name="artistId" id="artistId" required>
+    <option value="">Sélectionner un artiste</option>
+    <option th:each="artist : ${artists}" th:value="${artist.id}" th:text="${artist.firstname} + ' ' + ${artist.lastname}"></option>
+  </select>
+  <br>
+  <label for="troupeId">Troupe :</label>
+  <select name="troupeId" id="troupeId" required>
+    <option value="">Sélectionner une troupe</option>
+    <option th:each="troupe : ${troupes}" th:value="${troupe.id}" th:text="${troupe.name}"></option>
+  </select>
+  <br>
+  <button type="submit">Affilier</button>
+</form>
+<a th:href="@{/artists}">Retour à la liste des artistes</a>
+</body>
+</html>

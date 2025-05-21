@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Liste des artistes</title>
+</head>
+<body>
+<h1>Liste des artistes</h1>
+<table border="1">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Prénom</th>
+    <th>Nom</th>
+    <th>Troupe (Nom)</th>
+    <th>Troupe (Logo URL)</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="artist : ${artists}">
+    <td th:text="${artist.id}"></td>
+    <td th:text="${artist.firstname}"></td>
+    <td th:text="${artist.lastname}"></td>
+    <td th:text="${artist.troupe != null ? artist.troupe.name : 'Aucune troupe'}"></td>
+    <td th:text="${artist.troupe != null ? artist.troupe.logoUrl : 'Aucune troupe'}"></td>
+  </tr>
+  </tbody>
+</table>
+<a th:href="@{/admin/affiliate}">Affilier un artiste (Admin)</a>
+</body>
+</html>

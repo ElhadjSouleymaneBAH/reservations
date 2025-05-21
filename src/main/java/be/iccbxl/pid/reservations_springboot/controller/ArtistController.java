@@ -1,29 +1,35 @@
 package be.iccbxl.pid.reservations_springboot.controller;
 
-
 import java.util.List;
-
+import be.iccbxl.pid.reservations_springboot.model.Artist;
+import be.iccbxl.pid.reservations_springboot.model.Troupe;
+import be.iccbxl.pid.reservations_springboot.service.ArtistService;
+import be.iccbxl.pid.reservations_springboot.service.TroupeService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import be.iccbxl.pid.reservations_springboot.model.Artist;
-import be.iccbxl.pid.reservations_springboot.service.ArtistService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 
 @Controller
 public class ArtistController {
+
     @Autowired
     ArtistService service;
+
+    @Autowired
+    TroupeService troupeService;
+
+    // Affichage de la liste des artistes (F1)
+    @GetMapping("/artists")
+    public String showArtists(Model model) {
+        model.addAttribute("artists", service.getAllArtists());
+        return "artist/list";
+    }
 
     // Affichage de la page de modification d'un artiste
     @GetMapping("/artists/{id}/edit")
@@ -106,5 +112,36 @@ public class ArtistController {
         return "redirect:/artists";
     }
 
-}
+    // Affichage du formulaire d'affiliation (A1)
+    @GetMapping("/admin/affiliate")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String showAffiliationForm(Model model) {
+        model.addAttribute("artists", service.getAllArtists());
+        model.addAttribute("troupes", troupeService.getAllTroupes());
+        return "artist/affiliate";
+    }
 
+    // Soumission du formulaire d'affiliation (A1)
+    @PostMapping("/admin/affiliate")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String affiliateArtist(@RequestParam(value = "artistId", required = false) Long artistId,
+                                  @RequestParam(value = "troupeId", required = false) Long troupeId,
+                                  RedirectAttributes redirAttrs) {
+        if (artistId == null || troupeId == null) {
+            redirAttrs.addFlashAttribute("errorMessage", "Veuillez sélectionner un artiste et une troupe.");
+            return "redirect:/admin/affiliate";
+        }
+
+        Artist artist = service.getArtist(artistId);
+        Troupe troupe = troupeService.getTroupe(troupeId);
+
+        if (artist != null && troupe != null) {
+            artist.setTroupe(troupe);
+            service.updateArtist(artistId, artist);
+            redirAttrs.addFlashAttribute("successMessage", "Artiste affilié avec succès.");
+        } else {
+            redirAttrs.addFlashAttribute("errorMessage", "Échec de l'affiliation : artiste ou troupe introuvable.");
+        }
+        return "redirect:/artists";
+    }
+}
