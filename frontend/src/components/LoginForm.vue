@@ -31,27 +31,29 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 
 const router = useRouter()
 const loginForm = ref({ login: '', password: '' })
 const error = ref(false)
 
 const login = async () => {
-  //  Authentification simulée (à remplacer avec le backend réel plus tard)
-  if (
-    (loginForm.value.login === 'admin' && loginForm.value.password === 'admin') ||
-    (loginForm.value.login === 'user' && loginForm.value.password === '1234')
-  ) {
+  try {
+    const response = await axios.post('/api/auth/login', loginForm.value)
+
     const user = {
       login: loginForm.value.login,
-      role: loginForm.value.login === 'admin' ? 'ADMIN' : 'MEMBER',
-      id: loginForm.value.login === 'admin' ? 99 : 1
+      role: response.data.role,
+      token: response.data.token,
+      userId: response.data.userId
     }
 
     localStorage.setItem('user', JSON.stringify(user))
+    axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`
+
     error.value = false
     router.push('/')
-  } else {
+  } catch (err) {
     error.value = true
   }
 }

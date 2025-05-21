@@ -23,24 +23,24 @@
           {{ show.bookable ? 'Oui' : 'Non' }}
         </span>
       </li>
-      <li class="list-group-item" v-if="show.location">
-        <strong>Lieu :</strong> {{ show.location.designation }}
+      <li class="list-group-item" v-if="show.locationDesignation">
+        <strong>Lieu :</strong> {{ show.locationDesignation }}
       </li>
     </ul>
 
-    <!-- Tags du spectacle -->
+    <!-- Mots-clés (tags) -->
     <div v-if="show.tags && show.tags.length" class="mt-4">
       <strong>Mots-clés :</strong>
       <span
         v-for="tag in show.tags"
-        :key="tag.id"
+        :key="tag"
         class="badge bg-info text-dark me-2"
       >
-        {{ tag.tag }}
+        {{ tag }}
       </span>
     </div>
 
-    <!-- Ajout d'un tag (admin uniquement) -->
+    <!-- Formulaire d'ajout de tag (admin seulement) -->
     <div class="mt-4" v-if="isAdmin">
       <form @submit.prevent="addTag">
         <div class="input-group">
@@ -48,10 +48,12 @@
             v-model="newTag"
             type="text"
             class="form-control"
-            placeholder="Ajouter un mot-clé (tag)"
+            placeholder="Ajouter un mot-clé"
             required
           />
-          <button class="btn btn-outline-primary" type="submit">Ajouter</button>
+          <button class="btn btn-outline-primary" type="submit">
+            Ajouter
+          </button>
         </div>
       </form>
       <p v-if="tagMessage" class="text-success mt-2">{{ tagMessage }}</p>
@@ -59,8 +61,7 @@
 
     <!-- Représentations -->
     <h4 class="mt-5">Représentations disponibles</h4>
-
-    <div v-if="show.representations && show.representations.length > 0">
+    <div v-if="show.representations?.length">
       <table class="table mt-3">
         <thead>
         <tr>
@@ -70,13 +71,16 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="representation in show.representations" :key="representation.id">
-          <td>{{ formatDate(representation.schedule) }}</td>
-          <td>{{ representation.location?.designation || 'Non précisé' }}</td>
+        <tr
+          v-for="repr in show.representations"
+          :key="repr.id"
+        >
+          <td>{{ formatDate(repr.schedule) }}</td>
+          <td>{{ repr.location?.designation || 'Non précisé' }}</td>
           <td>
             <router-link
               class="btn btn-sm btn-primary"
-              :to="`/reserve/${show.id}`"
+              :to="`/reserve/${repr.id}`"
             >
               Réserver
             </router-link>
@@ -85,11 +89,15 @@
         </tbody>
       </table>
     </div>
-    <div v-else class="text-muted mt-2">Aucune représentation prévue.</div>
+    <div v-else class="text-muted mt-2">
+      Aucune représentation prévue.
+    </div>
 
     <!-- Retour -->
     <div class="text-center mt-4">
-      <router-link to="/" class="btn btn-secondary">← Retour au catalogue</router-link>
+      <router-link to="/" class="btn btn-secondary">
+        ← Retour au catalogue
+      </router-link>
     </div>
   </div>
 
@@ -107,22 +115,21 @@ import axios from 'axios'
 const show = ref(null)
 const route = useRoute()
 
-const newTag = ref("")
-const tagMessage = ref("")
-const isAdmin = localStorage.getItem("role") === "ADMIN"
+const newTag = ref('')
+const tagMessage = ref('')
+const isAdmin = localStorage.getItem('role') === 'ADMIN'
 
 const loadShow = async () => {
   try {
-    const response = await axios.get(`/api/shows/${route.params.id}`)
-    show.value = response.data
-  } catch (error) {
-    console.error('Erreur lors de la récupération du spectacle :', error)
+    const { data } = await axios.get(`/api/shows/${route.params.id}`)
+    show.value = data
+  } catch (err) {
+    console.error('Erreur récupération show :', err)
   }
 }
 
-const formatDate = (datetimeStr) => {
-  const date = new Date(datetimeStr)
-  return date.toLocaleString('fr-BE', {
+const formatDate = datetimeStr => {
+  return new Date(datetimeStr).toLocaleString('fr-BE', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -134,11 +141,11 @@ const formatDate = (datetimeStr) => {
 const addTag = async () => {
   try {
     await axios.post(`/api/tags/show/${show.value.id}/add`, { tag: newTag.value })
-    tagMessage.value = "Mot-clé ajouté avec succès "
-    newTag.value = ""
-    await loadShow()
+    tagMessage.value = 'Mot-clé ajouté avec succès'
+    newTag.value = ''
+    await loadShow()   // recharge pour afficher le nouveau tag
   } catch (err) {
-    tagMessage.value = "Erreur lors de l’ajout du tag "
+    tagMessage.value = 'Erreur lors de l’ajout du mot-clé'
     console.error(err)
   }
 }

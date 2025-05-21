@@ -23,6 +23,7 @@ public class TagDataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         if (tagRepository.count() == 0) {
+            // Créer quelques tags
             Tag comedie = new Tag("comédie");
             Tag musique = new Tag("musique");
             Tag classique = new Tag("classique");
@@ -31,7 +32,7 @@ public class TagDataLoader implements CommandLineRunner {
             tagRepository.save(musique);
             tagRepository.save(classique);
 
-            // Associer à un show existant (exemple avec id 1 et 2)
+            // Associer les tags à des shows existants
             Optional<Show> show1 = showRepository.findById(1L);
             Optional<Show> show2 = showRepository.findById(2L);
 

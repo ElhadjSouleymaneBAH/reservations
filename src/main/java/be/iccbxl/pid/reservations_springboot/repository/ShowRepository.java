@@ -13,6 +13,5 @@ public interface ShowRepository extends JpaRepository<Show, Long> {
     @Query("SELECT s FROM Show s WHERE :tag NOT MEMBER OF s.tags")
     List<Show> findShowsWithoutTag(@Param("tag") Tag tag);
 
-    // Pour la recherche par mot-clé
-    List<Show> findByTitleContaining(String title);
+    List<Show> findByTitleContainingIgnoreCase(String title);
 }

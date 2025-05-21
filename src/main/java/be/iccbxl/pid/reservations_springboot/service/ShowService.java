@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ShowService {
@@ -34,6 +33,6 @@ public class ShowService {
     }
 
     public List<Show> searchShowsByTitle(String title) {
-        return repository.findByTitleContaining(title);
+        return repository.findByTitleContainingIgnoreCase(title);
     }
 }
